@@ -29,7 +29,9 @@ jobs:
           rm -rf app/lib app/test
           mkdir app/lib
           cp pubspec.yaml app/pubspec.yaml
-          cp main.dart core.dart screens.dart app/lib/
+          cp main.dart core.dart screens.dart app/lib
+          mkdir -p app/assets
+cp icon.png icon_fg.png app/assets/
 
       - name: Patch Android manifest
         run: python3 patch_manifest.py app/android/app/src/main/AndroidManifest.xml
