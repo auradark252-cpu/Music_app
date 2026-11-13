@@ -13,8 +13,12 @@ perms = """
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 """
 s = re.sub(r"(<manifest[^>]*>)", lambda m: m.group(1) + perms, s, count=1)
+
+# app ka naam
+s = re.sub(r'android:label="[^"]*"', 'android:label="Universal Music"', s, count=1)
 
 # audio service activity
 s = s.replace('android:name=".MainActivity"',

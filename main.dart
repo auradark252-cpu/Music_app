@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'core.dart';
 import 'screens.dart';
 
@@ -18,19 +20,28 @@ class MusicApp extends StatelessWidget {
   const MusicApp({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        title: 'Music',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark(useMaterial3: true).copyWith(
-          scaffoldBackgroundColor: const Color(0xFF121212),
-          colorScheme: const ColorScheme.dark(primary: kAccent),
-          navigationBarTheme: const NavigationBarThemeData(
-            backgroundColor: Color(0xFF121212),
-            indicatorColor: Colors.transparent,
-          ),
+  Widget build(BuildContext context) {
+    final base = ThemeData.dark(useMaterial3: true);
+    return MaterialApp(
+      title: 'Universal Music',
+      debugShowCheckedModeBanner: false,
+      theme: base.copyWith(
+        scaffoldBackgroundColor: const Color(0xFF121212),
+        textTheme: GoogleFonts.interTextTheme(base.textTheme),
+        colorScheme: const ColorScheme.dark(primary: kAccent),
+        navigationBarTheme: NavigationBarThemeData(
+          backgroundColor: const Color(0xFF121212),
+          indicatorColor: Colors.transparent,
+          iconTheme: WidgetStateProperty.resolveWith((s) => IconThemeData(
+              color: s.contains(WidgetState.selected) ? Colors.white : Colors.white54)),
+          labelTextStyle: WidgetStateProperty.resolveWith((s) => TextStyle(
+              fontSize: 12,
+              color: s.contains(WidgetState.selected) ? Colors.white : Colors.white54)),
         ),
-        home: const Shell(),
-      );
+      ),
+      home: const Shell(),
+    );
+  }
 }
 
 class Shell extends StatefulWidget {
@@ -43,6 +54,12 @@ class Shell extends StatefulWidget {
 class _ShellState extends State<Shell> {
   int tab = 0;
   final pages = const [HomeScreen(), SearchScreen(), LibraryScreen()];
+
+  @override
+  void initState() {
+    super.initState();
+    Permission.notification.request(); // Android 13+ pe notification ke liye zaroori
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
